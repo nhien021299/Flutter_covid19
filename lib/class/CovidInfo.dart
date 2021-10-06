@@ -1,15 +1,12 @@
-import 'package:flutter/material.dart';
-
 class CovidInfo {
-
-  final String country;
-  final int totalConfirmed;
-  final int totalDeaths;
-  final int totalRecovered;
-  final int newConfirmed;
-  final int newDeaths;
-  final int newRecovered;
-  final String dateTime;
+  final String? country;
+  final int? totalConfirmed;
+  final int? totalDeaths;
+  final int? totalRecovered;
+  final int? newConfirmed;
+  final int? newDeaths;
+  final int? newRecovered;
+  final String? dateTime;
 
   CovidInfo({
     this.country,
@@ -21,7 +18,4 @@ class CovidInfo {
     this.newRecovered,
     this.dateTime,
   });
-
-
 }
-

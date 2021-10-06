@@ -1,5 +1,6 @@
 import 'package:final_flutter_project/class/CovidInfo.dart';
 import 'package:final_flutter_project/class/custom_appbar.dart';
+import 'package:final_flutter_project/covid_19/covid_item_widget.dart';
 import 'package:final_flutter_project/covid_19/covid_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +15,13 @@ class CovidWidget extends StatefulWidget {
 }
 
 class _CovidWidgetState extends State<CovidWidget> {
-  Bloc bloc;
-  String keyWord;
-  TextEditingController keyWordController;
-  List<CovidInfo> covidInfo = [];
+  late Bloc bloc;
+  late TextEditingController keyWordController;
 
   @override
   void initState() {
     super.initState();
-    bloc = CovidBloc();
-    bloc.add(InitialEvent());
+    bloc = BlocProvider.of<CovidBloc>(context);
     keyWordController = TextEditingController();
   }
 
@@ -32,38 +30,34 @@ class _CovidWidgetState extends State<CovidWidget> {
     super.dispose();
     keyWordController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(
-          height: 110,
-          bgColor: Color(0xFF4167B0),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-            child: Container(
-              padding: EdgeInsets.all(10),
-              width: 350,
-              height: 80,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(180),
+          child: Container(
+            color: Color(0xFF4167B0),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(10.0, 35.0, 10.0, 5.0),
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.search),
                   title: TextField(
                     controller: keyWordController,
-                    onChanged: (text){
-                      keyWord = text;
-                      bloc.add(SearchNameEvent(searchName: keyWord));
+                    onChanged: (text) async {
+                      await Future.delayed(const Duration(milliseconds: 500));
+                      bloc.add(SearchNameEvent(searchName: text));
                     },
                     decoration: InputDecoration(
-                      hintText: "Search",
-                      border: InputBorder.none
-                    ),
+                        hintText: "Search", border: InputBorder.none),
                   ),
                   trailing: IconButton(
                     icon: Icon(Icons.cancel),
-                    onPressed: (){
+                    onPressed: () {
                       keyWordController.clear();
                       bloc.add(InitialEvent());
                     },
@@ -74,125 +68,125 @@ class _CovidWidgetState extends State<CovidWidget> {
           ),
         ),
         body: RefreshIndicator(
-          onRefresh: (){
+          onRefresh: () {
             bloc.add(InitialEvent());
             keyWordController.clear();
             return Future.value(false);
           },
-          child: BlocBuilder<CovidBloc,CovidState>(
-            cubit: bloc,
-            builder: (context, CovidState state){
-              return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: state.listCovidInfo != null ? Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text('Thế Giới:', style: TextStyle(fontSize: 18, color: Colors.blue),),
+          child: BlocBuilder<CovidBloc, CovidState>(builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'Thế Giới:',
+                        style: TextStyle(fontSize: 18, color: Colors.blue),
                       ),
-                      Center(
-                        child: Card(
-                          elevation: 5.0,
-                          child: Container(
-                            width: 280,
-                            height: 90,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Text('Tổng số ca nhiễm: ${state.totalConfirmed}',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text('Tổng số ca tử vong: ${state.totalDeaths}',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text('Tổng số ca hồi phục: ${state.totalRecovered}',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ],
+                    ),
+                    Center(
+                      child: Card(
+                        elevation: 5.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Text(
+                                  'Tổng số ca nhiễm: ${state.totalConfirmed}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
                               ),
-                            ),
+                              Container(
+                                child: Text(
+                                  'Tổng số ca tử vong: ${state.totalDeaths}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  'Tổng số ca hồi phục: ${state.totalRecovered}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text('Việt Nam:', style: TextStyle(fontSize: 18, color: Colors.blue),),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'Việt Nam:',
+                        style: TextStyle(fontSize: 18, color: Colors.blue),
                       ),
-                      Center(
-                        child: Card(
-                          elevation: 5.0,
-                          child: Container(
-                            width: 280,
-                            height: 90,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Text('Tổng số ca nhiễm: ${state.vnTotalConfirmed}',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text('Tổng số ca tử vong: ${state.vnTotalDeaths}',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text('Tổng số ca hồi phục: ${state.vnTotalRecovered}',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ],
+                    ),
+                    Center(
+                      child: Card(
+                        elevation: 5.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Text(
+                                  'Tổng số ca nhiễm: ${state.vnTotalConfirmed}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
                               ),
-                            ),
+                              Container(
+                                child: Text(
+                                  'Tổng số ca tử vong: ${state.vnTotalDeaths}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  'Tổng số ca hồi phục: ${state.vnTotalRecovered}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text('Các Nước Khác:', style: TextStyle(fontSize: 18, color: Colors.blue),),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'Các Nước Khác:',
+                        style: TextStyle(fontSize: 18, color: Colors.blue),
                       ),
-                      Container(
-                        height: 330,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: ListView(
                           children: [
-                            for(var item in state.listCovidInfo)
+                            for (var item in state.listCovidInfo!)
                               _buildItem(item),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ):
-                Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation
-                      (Colors.blue),
-                    strokeWidth: 5,
-                  )
+                    ),
+                  ],
                 ),
-              );
-            }
-          ),
+              ),
+            );
+          }),
         ),
       ),
     );
   }
-  _buildItem(CovidInfo covidInfo){
+
+  _buildItem(CovidInfo covidInfo) {
     return Container(
       width: double.infinity,
       child: ExpansionTile(
@@ -204,48 +198,56 @@ class _CovidWidgetState extends State<CovidWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text('Tổng số ca nhiễm: ${covidInfo.totalConfirmed}',
+                child: Text(
+                  'Tổng số ca nhiễm: ${covidInfo.totalConfirmed}',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text(
+                  'Số ca nhiễm mới: ${covidInfo.newConfirmed}',
                   style: TextStyle(fontSize: 13),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text('Số ca nhiễm mới: ${covidInfo.newConfirmed}',
+                child: Text(
+                  'Tổng số ca tử vong: ${covidInfo.totalDeaths}',
                   style: TextStyle(fontSize: 13),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text('Tổng số ca tử vong: ${covidInfo.totalDeaths}',
+                child: Text(
+                  'Số ca tử vong: ${covidInfo.newDeaths}',
                   style: TextStyle(fontSize: 13),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text('Số ca tử vong: ${covidInfo.newDeaths}',
+                child: Text(
+                  'Tổng số ca hồi phục: ${covidInfo.totalRecovered}',
                   style: TextStyle(fontSize: 13),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text('Tổng số ca hồi phục: ${covidInfo.totalRecovered}',
+                child: Text(
+                  'Số ca hồi phục: ${covidInfo.newRecovered}',
                   style: TextStyle(fontSize: 13),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text('Số ca hồi phục: ${covidInfo.newRecovered}',
-                  style: TextStyle(fontSize: 13),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text('Ngày: ${covidInfo.dateTime}',
+                padding: EdgeInsets.only(bottom: 20),
+                child: Text(
+                  'Ngày: ${covidInfo.dateTime}',
                   style: TextStyle(fontSize: 13),
                 ),
               )
             ],
           ),
+
         ],
       ),
     );

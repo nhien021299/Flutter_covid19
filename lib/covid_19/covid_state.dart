@@ -2,54 +2,66 @@ import 'package:equatable/equatable.dart';
 import 'package:final_flutter_project/class/CovidInfo.dart';
 
 class CovidState extends Equatable {
+  String? totalConfirmed;
+  String? totalDeaths;
+  String? totalRecovered;
+  String? vnTotalConfirmed;
+  String? vnTotalDeaths;
+  String? vnTotalRecovered;
+  bool? error;
+  List<CovidInfo>? listCovidInfo;
+  List<CovidInfo>? searchedCovidInfos;
 
-  final String totalConfirmed;
-  final String totalDeaths;
-  final String totalRecovered;
-  final String vnTotalConfirmed;
-  final String vnTotalDeaths;
-  final String vnTotalRecovered;
-  final bool error;
-  final List<CovidInfo> listCovidInfo;
-
-  CovidState({
-    this.totalConfirmed = "",
-    this.totalDeaths = "",
-    this.totalRecovered = "",
-    this.vnTotalConfirmed = "",
-    this.vnTotalDeaths = "" ,
-    this.vnTotalRecovered = "",
-    this.error = true,
-    this.listCovidInfo,
-  });
+  CovidState(
+      {this.totalConfirmed,
+      this.totalDeaths,
+      this.totalRecovered,
+      this.vnTotalConfirmed,
+      this.vnTotalDeaths,
+      this.vnTotalRecovered,
+      this.error,
+      this.listCovidInfo,
+      this.searchedCovidInfos});
 
   CovidState copyWith({
-    String totalConfirmed,
-    String totalDeaths,
-    String totalRecovered,
-    String vnTotalConfirmed,
-    String vnTotalDeaths,
-    String vnTotalRecovered,
-    bool error,
-    List<CovidInfo> listCovidInfo,
+    String? totalConfirmed,
+    String? totalDeaths,
+    String? totalRecovered,
+    String? vnTotalConfirmed,
+    String? vnTotalDeaths,
+    String? vnTotalRecovered,
+    bool? error,
+    List<CovidInfo>? listCovidInfo,
+    List<CovidInfo>? searchedCovidInfos,
   }) =>
       CovidState(
-        totalConfirmed: totalConfirmed ,
-        totalDeaths: totalDeaths,
-        totalRecovered: totalRecovered,
-        vnTotalConfirmed: vnTotalConfirmed,
-        vnTotalDeaths: vnTotalDeaths,
-        vnTotalRecovered: vnTotalRecovered,
-        error: error,
-        listCovidInfo: listCovidInfo,
+        totalConfirmed: totalConfirmed ?? this.totalConfirmed,
+        totalDeaths: totalDeaths ?? this.totalDeaths,
+        totalRecovered: totalRecovered ?? this.totalRecovered,
+        vnTotalConfirmed: vnTotalConfirmed ?? this.vnTotalConfirmed,
+        vnTotalDeaths: vnTotalDeaths ?? this.vnTotalConfirmed,
+        vnTotalRecovered: vnTotalRecovered ?? this.vnTotalRecovered,
+        error: error ?? this.error,
+        listCovidInfo: listCovidInfo ?? this.listCovidInfo,
+        searchedCovidInfos: searchedCovidInfos ?? this.listCovidInfo,
       );
 
   @override
-  List<Object> get props => [totalConfirmed, totalDeaths, totalRecovered , vnTotalConfirmed, vnTotalDeaths, vnTotalRecovered, error ,listCovidInfo];
+  List<Object> get props => [
+        totalConfirmed ?? "",
+        totalDeaths ?? "",
+        totalRecovered ?? "",
+        vnTotalConfirmed ?? "",
+        vnTotalDeaths ?? "",
+        vnTotalRecovered ?? "",
+        error ?? false,
+        listCovidInfo ?? [],
+        searchedCovidInfos ?? [],
+      ];
 
   @override
   bool operator ==(Object other) {
-    if (props == null || props.isEmpty) {
+    if (props.isEmpty) {
       return false;
     }
     return super == other;

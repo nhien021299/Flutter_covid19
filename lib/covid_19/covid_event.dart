@@ -7,12 +7,12 @@ abstract class CovidEvent extends Equatable {
 
 class SearchNameEvent extends CovidEvent{
   final String searchName;
-  SearchNameEvent({this.searchName});
+  SearchNameEvent({required this.searchName});
 }
 
 class ErrorEvent extends CovidEvent{
   final String searchString;
-  ErrorEvent({this.searchString});
+  ErrorEvent({required this.searchString});
 }
 
 class InitialEvent extends CovidEvent{
