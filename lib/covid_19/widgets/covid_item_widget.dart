@@ -1,9 +1,9 @@
-import 'package:final_flutter_project/class/CovidInfo.dart';
+import 'package:final_flutter_project/model/covid_model.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CovidItemWidget extends StatelessWidget {
-  final CovidInfo covidInfo;
+  final CovidModel covidInfo;
+
   const CovidItemWidget({Key? key, required this.covidInfo}) : super(key: key);
 
   @override
@@ -11,7 +11,7 @@ class CovidItemWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: ExpansionTile(
-        leading: Icon(FontAwesomeIcons.globeAmericas),
+        leading: Icon(Icons.coronavirus),
         title: Text('${covidInfo.country}'),
         children: [
           Column(

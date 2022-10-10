@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
 //
-// class CustomAppBar extends PreferredSize {
+// model CustomAppBar extends PreferredSize {
 //   final Widget child;
 //   final double? height;
 //   final Color? bgColor;

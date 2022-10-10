@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "appAssociation": "AUTO",
+  "rewrites": [
+    {
+      "source": "/**",
+      "dynamicLinks": true
+    }
+  ]
+}
